@@ -237,7 +237,7 @@ python -m venv .venv
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 python -m ipykernel install --user --name mcdia500-g6 --display-name "Python 3.12 - MCDIA500 G6"
-jupyter lab
+python -m jupyterlab --ServerApp.use_redirect_file=False
 ```
 
 Con estos pasos, el entorno queda configurado para ejecutar los notebooks del proyecto.
