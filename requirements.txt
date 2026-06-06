@@ -1,0 +1,21 @@
+# Dependencias principales de proyecto para  MCDIA500 - Programación Ciencia de Datos
+# Python recomendado: 3.12.x
+
+# Entorno Jupyter
+jupyterlab==4.4.3
+notebook==7.4.3
+ipykernel==6.29.5
+
+# Análisis y manipulación de datos
+pandas==2.3.0
+numpy==2.3.0
+
+# Visualización
+matplotlib==3.10.3
+
+# Machine Learning
+scikit-learn==1.7.0
+
+# Utilidades recomendadas
+joblib==1.5.1
+scipy==1.15.3
