@@ -12,8 +12,6 @@ El proyecto está organizado para facilitar la trazabilidad, reutilización de f
 
 ## Estructura del proyecto
 
-## Estructura del proyecto
-
 ```text
 mcdia500-programacion-cd-g6/
 │
@@ -54,7 +52,7 @@ mcdia500-programacion-cd-g6/
 
 ## Requisitos previos
 
-Antes de ejecutar el proyecto, se requiere tener instalado:
+Antes de ejecutar el proyecto, es necesario tener instalado:
 
 - Python 3.12.x
 - Git
@@ -70,7 +68,7 @@ Antes de ejecutar el proyecto, se requiere tener instalado:
 git clone https://github.com/MagUnab/mcdia500-programacion-cd-g6.git
 ```
 
-Ingresar a la carpeta del proyecto:
+Ingresar a la carpeta donde se clonó el repositorio:
 
 ```powershell
 cd mcdia500-programacion-cd-g6
@@ -129,7 +127,7 @@ python -m ipykernel install --user --name mcdia500-g6 --display-name "Python 3.1
 ### 7. Ejecutar JupyterLab
 
 ```powershell
-jupyter lab
+python -m jupyterlab --ServerApp.use_redirect_file=False
 ```
 
 Dentro de JupyterLab seleccionarel kernel:
@@ -148,10 +146,10 @@ Los notebooks del proyecto se encuentran en la carpeta:
 notebooks/
 ```
 
-Los datos originales se encuentran en:
+Los datos originales (crudos) se encuentran en:
 
 ```text
-raw/
+data/raw/
 ```
 
 Las funciones reutilizables se encuentran en:
@@ -175,7 +173,7 @@ Ejemplo de carga de datos:
 ```python
 import pandas as pd
 
-df = pd.read_csv("../raw/diabetes_raw.csv", sep=";")
+df = pd.read_csv("../data/raw/diabetes_raw.csv", sep=";")
 df.head()
 ```
 
@@ -198,7 +196,7 @@ git add .
 Para crear un commit:
 
 ```powershell
-git commit -m "Actualizar avance del proyecto"
+git commit -m "feat: Nueva función python que realiza limpieza de dataset "
 ```
 
 Para subir los cambios a GitHub:
