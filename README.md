@@ -198,7 +198,7 @@ git add .
 Para crear un commit:
 
 ```powershell
-git commit -m "Actualizar avance del proyecto"
+git commit -m "feat: Nueva función python que realiza limpieza de dataset "
 ```
 
 Para subir los cambios a GitHub:
