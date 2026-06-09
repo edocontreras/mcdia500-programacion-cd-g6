@@ -1,46 +1,38 @@
 # MCDIA500 - Programación para Ciencia de Datos
 
-## Objetivo del proyecto
+## Objetivo De la Fase
 
-Este proyecto tiene como objetivo desarrollar un flujo de trabajo reproducible para el análisis de un dataset de diabetes, aplicando técnicas de programación en Python orientadas a ciencia de datos.
-
-El trabajo considera la carga, exploración, limpieza y preparación de datos con presencia de registros sucios, valores inválidos, datos faltantes y formatos inconsistentes. Posteriormente, el proyecto busca construir una base experimental que permita aplicar modelos de machine learning para predecir la variable `Outcome`, asociada a la presencia o ausencia de diabetes.
-
-El proyecto está organizado para facilitar la trazabilidad, reutilización de funciones, ejecución en notebooks de Jupyter y control de versiones mediante GitHub.
+- Definir el problema y estructurar el dataset con el cual trabajaremos
+- Generar estructura del Repositorio
+- Generar stack cientifico de desarrollo 
+- Crear Notebook F1_Definicion.ipynb que realice la carga y lectura de dataset
 
 ---
 
-## Estructura del proyecto
+## Estructura de la Fase
 
 ```text
 mcdia500-programacion-cd-g6/
-│
-├── data/
-│   ├── raw/
-│   │   └── diabetes_raw.csv
-│   │
-│   └── processed/
-│       └── .gitkeep
-│
-├── docs/
-│   └── .gitkeep
-│
-├── notebooks/
-│   └── F1_Definicion.ipynb
-│
-├── reports/
-│   └── .gitkeep
-│
-├── src/
-│   └── utils.py
-│
-├── requirements.txt
-├── README.md
-└── .gitignore
+└── F1/
+    ├── data/
+    │   ├── raw/
+    │   │   └── diabetes_raw.csv
+    │   └── processed/
+    │       └── .gitkeep
+    ├── docs/
+    │   └── .gitkeep
+    ├── notebooks/
+    │   └── F1_Definicion.ipynb
+    ├── reports/
+    │   └── .gitkeep
+    ├── src/
+    ├── requirements.txt
+    ├── README.md
+    └── .gitignore
 ```
 
-### Descripción de carpetas
-
+### Descripción de las carpetas
+- `F1`: raíz de la Fase 1.
 - `data/raw/`: contiene los datos originales o crudos del proyecto.
 - `data/processed/`: contiene datasets procesados, limpios o transformados.
 - `docs/`: contiene documentación complementaria del proyecto.
@@ -71,7 +63,7 @@ git clone https://github.com/MagUnab/mcdia500-programacion-cd-g6.git
 Ingresar a la carpeta donde se clonó el repositorio:
 
 ```powershell
-cd mcdia500-programacion-cd-g6
+cd mcdia500-programacion-cd-g6/F1
 ```
 
 ---
@@ -95,7 +87,7 @@ En Windows PowerShell:
 Si la activación fue correcta, se debe ver algo como esto:
 
 ```text
-(.venv) PS C:\ruta\del\proyecto>
+(.venv) PS C:\ruta\del\proyecto\F1>
 ```
 
 ---
@@ -229,7 +221,7 @@ Para reproducir el proyecto en otro equipo, se deben ejecutar los siguientes pas
 
 ```powershell
 git clone https://github.com/MagUnab/mcdia500-programacion-cd-g6.git
-cd mcdia500-programacion-cd-g6
+cd mcdia500-programacion-cd-g6/F1
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
