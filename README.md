@@ -11,35 +11,27 @@ El proyecto está organizado para facilitar la trazabilidad, reutilización de f
 ---
 
 ## Estructura del proyecto
+Para completar el curso de programación cada carpeta F* tiene el avance semanal (incremental) del proyecto.
 
 ```text
+
 mcdia500-programacion-cd-g6/
 │
-├── data/
-│   ├── raw/
-│   │   └── diabetes_raw.csv
-│   │
-│   └── processed/
-│       └── .gitkeep
+├── F1/
 │
-├── docs/
-│   └── .gitkeep
+├── F2/
 │
-├── notebooks/
-│   └── F1_Definicion.ipynb
+├── F3/
 │
-├── reports/
-│   └── .gitkeep
+├── F4/
 │
-├── src/
-│   └── utils.py
-│
-├── requirements.txt
 ├── README.md
-└── .gitignore
+└─
 ```
 
-### Descripción de carpetas
+### Descripción de carpetas y archivos
+
+Cada carpeta F1/F2/F3/F4 replica la siguiente estructura
 
 - `data/raw/`: contiene los datos originales o crudos del proyecto.
 - `data/processed/`: contiene datasets procesados, limpios o transformados.
@@ -47,7 +39,7 @@ mcdia500-programacion-cd-g6/
 - `notebooks/`: contiene los notebooks de análisis, limpieza, experimentación y modelamiento.
 - `reports/`: contiene reportes, resultados, gráficos exportados o conclusiones generadas.
 - `src/`: contiene funciones reutilizables, módulos auxiliares y código Python del proyecto.
-
+-
 ---
 
 ## Requisitos previos
@@ -68,12 +60,21 @@ Antes de ejecutar el proyecto, es necesario tener instalado:
 git clone https://github.com/MagUnab/mcdia500-programacion-cd-g6.git
 ```
 
-Ingresar a la carpeta donde se clonó el repositorio:
+Ingresar a la carpeta donde se clonó el repositorio:</br>
+
+NOTA: Para el revisar el avance semanal por sumatoria, ingresar de la siguiente forma:</br>
+
+- Para Semana 1 Sumatoria 1 -> F1
+- Para Semana 1 Sumatoria 2 -> F2
+- Para Semana 2 Sumatoria 3 -> F3
+- Para Semana 3 Sumatoria 4 -> F4
 
 ```powershell
-cd mcdia500-programacion-cd-g6
+cd mcdia500-programacion-cd-g6/F1
+cd mcdia500-programacion-cd-g6/F2
+cd mcdia500-programacion-cd-g6/F3
+cd mcdia500-programacion-cd-g6/F4
 ```
-
 ---
 
 ### 2. Crear el entorno virtual
@@ -95,7 +96,7 @@ En Windows PowerShell:
 Si la activación fue correcta, se debe ver algo como esto:
 
 ```text
-(.venv) PS C:\ruta\del\proyecto>
+(.venv) PS C:\ruta\del\proyecto\F1 o F2 o F3 o F4> -- según corresponda
 ```
 
 ---
@@ -225,11 +226,11 @@ __pycache__/
 
 ## Reproducibilidad
 
-Para reproducir el proyecto en otro equipo, se deben ejecutar los siguientes pasos:
+Para reproducir el proyecto en otro equipo, por ejemplo la Fase 1 se deben ejecutar los siguientes pasos, 
 
 ```powershell
 git clone https://github.com/MagUnab/mcdia500-programacion-cd-g6.git
-cd mcdia500-programacion-cd-g6
+cd mcdia500-programacion-cd-g6/F1
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
