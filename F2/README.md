@@ -2,11 +2,13 @@
 
 ## Objetivo De la Fase
 
-- Incrementar notebook de fase 1 para
-    - aplicar pipeline que realice limpieza, prepocesamiento y transformación del dataset
+- Incrementar notebook de Fase 1 para
+    - Aplicar pipeline que realice limpieza
+    - Prepocesamiento
+    - Transformación del dataset
 - Generar modularidad a través de funciones en el código para posterior reutilización
 - Realizar verificaciones de los casos y manejar excepciones
-- Incoporar las librerias necesarias para la la fase
+- Incoporar las librerias necesarias para la la Fase 2
 ---
 
 ## Estructura de la Fase
@@ -33,7 +35,7 @@ mcdia500-programacion-cd-g6/
 ```
 
 ### Descripción de las carpetas
-- `F2`: raíz de la Fase1.
+- `F2`: raíz de la Fase 2.
 - `data/raw/`: contiene los datos originales o crudos del proyecto.
 - `data/processed/`: contiene datasets procesados, limpios o transformados.
 - `docs/`: contiene documentación complementaria del proyecto.
