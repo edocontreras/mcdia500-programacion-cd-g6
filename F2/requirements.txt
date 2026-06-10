@@ -9,6 +9,7 @@ ipykernel==7.2.0
 # Análisis y manipulación de datos
 pandas==3.0.3
 numpy==2.4.6
+scikit-learn==1.5
 
 # Gráfica y Visualización
 matplotlib==3.10.9
