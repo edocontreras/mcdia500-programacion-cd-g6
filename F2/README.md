@@ -224,7 +224,7 @@ Para reproducir el proyecto en otro equipo, se deben ejecutar los siguientes pas
 
 ```powershell
 git clone https://github.com/MagUnab/mcdia500-programacion-cd-g6.git
-cd mcdia500-programacion-cd-g6/F1
+cd mcdia500-programacion-cd-g6/F2
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
