@@ -293,6 +293,12 @@ class PreprocesadorDiabetes:
             print(f'\n  Columnas antes: {n_antes} | Columnas después: {self.df.shape[1]}')
         return self
 
+    def aplicar_drop_columnas(self, columnas: list):
+        """Elimina columnas de forma explícita del estado del DataFrame."""
+        if self.df is not None:
+            self.df = self.df.drop(columns=columnas, errors='ignore')
+        return self
+
     def escalar_variables(self, columnas: list):
         """Aplica StandardScaler in-place preservando la dimensionalidad compacta."""
         if self.df is not None:
@@ -409,26 +415,3 @@ class PreprocesadorDiabetes:
     def obtener_dataframe(self):
         """Devuelve el DataFrame en su estado actual (Necesario para el Method Chaining)."""
         return self.df
-
-
-# ==============================================================================
-# 3. SUBCLASE ESPECIALIZADA: POLIMORFISMO APLICADO (Exigencia de Herencia)
-# ==============================================================================
-
-class PreprocesadorClinicoAvanzado(PreprocesadorDiabetes):
-    """
-    Clase especializada que extiende la funcionalidad base.
-    Implementa polimorfismo para modificar la estrategia de descarte por una 
-    estrategia de conservación avanzada en variables clínicas fragmentadas.
-    """
-    def tratar_skin_thickness_polimorfico(self):
-        """
-        Especialización de pipeline: En lugar de eliminar SkinThickness,
-        recupera la columna reemplazando ceros por NaN e imputando con su propia mediana.
-        """
-        if self.df is not None:
-            self.df['SkinThickness'] = self.df['SkinThickness'].replace(0, np.nan)
-            mediana_skin = self.df['SkinThickness'].median()
-            self.df['SkinThickness'] = self.df['SkinThickness'].fillna(mediana_skin)
-            print(f"[POLIMORFISMO] SkinThickness recuperada e imputada con mediana propia ({mediana_skin:.3f})")
-        return self
