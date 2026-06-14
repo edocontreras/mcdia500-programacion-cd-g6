@@ -109,27 +109,38 @@ La separación del código en `src/utils.py` permite mejorar la organización, r
 
 ---
 
-## Programación funcional y estructurada
+## Programación Orientada a Objetos
 
-La primera parte del desarrollo se basa en funciones independientes con responsabilidades específicas.
-Cada función cumple una tarea concreta dentro del flujo de trabajo, permitiendo mantener alta cohesión y bajo acoplamiento.
+En esta fase se incorpora programación orientada a objetos para organizar el flujo de preprocesamiento y transformación de datos.
 
-Ejemplos de funciones utilizadas:
+En el archico utils.py existen dos clases:
 
-```python
-cargar_datos()
-explorar_dataset()
-castear_bloodpressure()
-reemplazar_invalidos()
-eliminar_duplicados()
-imputar_mediana()
-crear_variables_derivadas()
-codificar_categoricas()
-escalar_variables()
-validar_dataset_final()
-```
+- PreprocesadorBase
+        - Clase Madre que define el comportamiento y los atributos globales del pipeline.
+          Resguarda la consistencia de la ingesta y expone la interfaz operacional estándar
 
-Este enfoque permite construir un flujo de entrada, procesamiento y salida de datos de forma clara y verificable.
+- PreprocesadorDiabetes
+        - Clase Hija que extiende de PreprocesadorBase.
+          Mantiene el encapsulamiento del estado interno e implementa Polimorfismo mediante 
+          la sobrescritura de métodos para aplicar reglas clínico-sintácticas directas.
+
+Los principales conceptos aplicados son:
+
+### Encapsulamiento
+
+El estado del dataset se protege dentro de clases, evitando modificar directamente los datos desde fuera de la estructura definida.
+
+### Herencia
+
+Se define una clase base o contrato común para transformadores, desde la cual heredan clases especializadas.
+
+### Polimorfismo
+
+Distintas clases pueden ser ejecutadas mediante una misma interfaz, permitiendo que el pipeline procese diferentes transformaciones de manera uniforme.
+
+### Composición
+
+El pipeline se construye mediante una lista de etapas, donde cada etapa representa una transformación aplicada al dataset.
 
 ---
 
@@ -179,28 +190,6 @@ Se comparan distintas implementaciones para evaluar eficiencia, por ejemplo:
 Las mediciones permiten interpretar el comportamiento computacional de cada solución y relacionarlo con su complejidad algorítmica.
 
 ---
-
-## Programación Orientada a Objetos
-
-La fase incorpora programación orientada a objetos para organizar el flujo de preprocesamiento y transformación de datos.
-
-Los principales conceptos aplicados son:
-
-### Encapsulamiento
-
-El estado del dataset se protege dentro de clases, evitando modificar directamente los datos desde fuera de la estructura definida.
-
-### Herencia
-
-Se define una clase base o contrato común para transformadores, desde la cual heredan clases especializadas.
-
-### Polimorfismo
-
-Distintas clases pueden ser ejecutadas mediante una misma interfaz, permitiendo que el pipeline procese diferentes transformaciones de manera uniforme.
-
-### Composición
-
-El pipeline se construye mediante una lista de etapas, donde cada etapa representa una transformación aplicada al dataset.
 
 ---
 
