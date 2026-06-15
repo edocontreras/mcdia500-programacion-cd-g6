@@ -36,17 +36,16 @@ def auditar_carpetas_recursivo(ruta_actual: str, profundidad: int = 0):
 
 
 # ==============================================================================
-# 2. CLASE PRINCIPAL: PIPELINE DE PREPROCESAMIENTO (POO & Encapsulamiento)
+# 2. CLASE BASE: INFRAESTRUCTURA ARQUITECTÓNICA DEL PIPELINE (Herencia)
 # ==============================================================================
 
-class PreprocesadorDiabetes:
+class PreprocesadorBase:
     """
-    Clase que centraliza y encapsula el pipeline de datos clínicos de diabetes.
-    Mantiene el estado interno de la matriz mediante atributos de instancia,
-    evitando variables volátiles sueltas en el Kernel del notebook.
+    Clase Madre que define el comportamiento y los atributos globales del pipeline.
+    Resguarda la consistencia de la ingesta y expone la interfaz operacional estándar.
     """
     def __init__(self, ruta_csv: Path):
-        """Constructor: Inicializa el objeto y el control perimetral de estados."""
+        """Constructor base: Inicializa las propiedades perimetrales del tensor."""
         self.ruta = Path(ruta_csv)
         self.df_original = None
         self.df = None
@@ -64,6 +63,43 @@ class PreprocesadorDiabetes:
         # Generamos la copia de trabajo inmutable en el origen
         self.df = self.df_original.copy()
         print(f"[OK] Ingesta exitosa. Dimensiones: {self.df.shape[0]} filas × {self.df.shape[1]} columnas.")
+        return self
+
+    def procesar_especifico(self):
+        """
+        Método Polimórfico Core.
+        Diseñado explícitamente para ser sobrescrito por subclases analíticas especializadas.
+        """
+        print("[Base] Ejecutando análisis perimetral genérico de infraestructura.")
+        return self
+
+
+# ==============================================================================
+# 3. SUBCLASE ESPECIALIZADA: PIPELINE DE NEGOCIO (Polimorfismo & Encapsulamiento)
+# ==============================================================================
+
+class PreprocesadorDiabetes(PreprocesadorBase):
+    """
+    Clase Hija que extiende de PreprocesadorBase.
+    Mantiene el encapsulamiento del estado interno e implementa Polimorfismo mediante 
+    la sobrescritura de métodos para aplicar reglas clínico-sintácticas directas.
+    """
+
+    def procesar_especifico(self):
+        """
+        Implementación Polimórfica.
+        Sobrescrita para aplicar la regla de negocio particular de exclusión de atributos 
+        degradados (como SkinThickness) sin alterar la interfaz matriz del pipeline.
+        """
+        print(f"\n{self.SEP}\n[POLIMORFISMO] Aplicando Regla Clínico-Sintáctica Especializada\n{self.SEP}")
+        
+        col_excluir = 'SkinThickness'
+        if col_excluir in self.df.columns:
+            print(f"  -> Criterio de Exclusión: Removiendo vector '{col_excluir}' por fragmentación sintáctica extrema.")
+            self.df = self.df.drop(columns=[col_excluir])
+        else:
+            print(f"  -> Vector '{col_excluir}' no presente o previamente purificado por el flujo de trabajo.")
+            
         return self
 
     def explorar_dataset(self):
@@ -91,14 +127,18 @@ class PreprocesadorDiabetes:
                 print(f"  {col:<30}: {n} ceros")
 
         print(f"\n{self.SEP}\n[5] VALORES CENTINELA Y OUTLIERS EXTREMOS\n{self.SEP}")
-        print(f"  Glucose  > 300  : {(self.df['Glucose'] > 300).sum()} filas (centinela 999)")
-        print(f"  Age      > 100  : {(self.df['Age'] > 100).sum()} filas (centinela 150)")
-        print(f"  BMI      > 60   : {(self.df['BMI'] > 60).sum()} filas")
+        if 'Glucose' in self.df.columns:
+            print(f"  Glucose  > 300  : {(self.df['Glucose'] > 300).sum()} filas (centinela 999)")
+        if 'Age' in self.df.columns:
+            print(f"  Age      > 100  : {(self.df['Age'] > 100).sum()} filas (centinela 150)")
+        if 'BMI' in self.df.columns:
+            print(f"  BMI      > 60   : {(self.df['BMI'] > 60).sum()} filas")
         
-        n_interrogante = (self.df['BloodPressure'].astype(str) == '?').sum()
-        n_unidad = self.df['BloodPressure'].astype(str).str.contains('mmHg', na=False).sum()
-        print(f"  BloodPressure '?'   : {n_interrogante} filas")
-        print(f"  BloodPressure 'mmHg': {n_unidad} filas con unidad embebida")
+        if 'BloodPressure' in self.df.columns:
+            n_interrogante = (self.df['BloodPressure'].astype(str) == '?').sum()
+            n_unidad = self.df['BloodPressure'].astype(str).str.contains('mmHg', na=False).sum()
+            print(f"  BloodPressure '?'   : {n_interrogante} filas")
+            print(f"  BloodPressure 'mmHg': {n_unidad} filas con unidad embebida")
 
         print(f"\n{self.SEP}\n[6] FILAS DUPLICADAS\n{self.SEP}")
         print(f"  Total duplicadas: {self.df.duplicated().sum()}")
@@ -107,22 +147,25 @@ class PreprocesadorDiabetes:
         print(self.df.describe().round(3).to_string())
 
         print(f"\n{self.SEP}\n[8] DISTRIBUCIÓN VARIABLE OBJETIVO (Outcome)\n{self.SEP}")
-        conteo = self.df['Outcome'].value_counts()
-        pct_o = self.df['Outcome'].value_counts(normalize=True).mul(100).round(2)
-        print(pd.DataFrame({'Conteo': conteo, '%': pct_o}).to_string())
+        if 'Outcome' in self.df.columns:
+            conteo = self.df['Outcome'].value_counts()
+            pct_o = self.df['Outcome'].value_counts(normalize=True).mul(100).round(2)
+            print(pd.DataFrame({'Conteo': conteo, '%': pct_o}).to_string())
         return self
 
     def eliminar_columnas(self, columnas: list):
         """Elimina del estado interno columnas con calidad insuficiente."""
         if self.df is not None:
-            self.df = self.df.drop(columns=columnas)
-            print(f"[COLUMNAS ELIMINADAS] {columnas}")
+            columnas_existentes = [c for c in columnas if c in self.df.columns]
+            if columnas_existentes:
+                self.df = self.df.drop(columns=columnas_existentes)
+                print(f"[COLUMNAS ELIMINADAS] {columnas_existentes}")
             print(f"  Columnas restantes: {list(self.df.columns)}")
         return self
 
     def castear_bloodpressure(self):
         """Limpia y convierte de forma vectorizada la columna BloodPressure."""
-        if self.df is not None:
+        if self.df is not None and 'BloodPressure' in self.df.columns:
             self.df['BloodPressure'] = (
                 self.df['BloodPressure']
                 .astype(str)
@@ -144,23 +187,26 @@ class PreprocesadorDiabetes:
                 if col in self.df.columns:
                     n = (self.df[col] == 0).sum()
                     self.df[col] = self.df[col].replace(0, np.nan)
-                    print(f"  {col:<20}: {n:4d} ceros reemplados")
+                    print(f"  {col:<20}: {n:4d} ceros reemplazados")
 
             print("\n[VALORES CENTINELA / OUTLIERS EXTREMOS → NaN]")
-            n_g = (self.df['Glucose'] > 300).sum()
-            self.df['Glucose'] = self.df['Glucose'].where(self.df['Glucose'] <= 300, np.nan)
-            print(f"  Glucose > 300              : {n_g:4d} → NaN")
+            if 'Glucose' in self.df.columns:
+                n_g = (self.df['Glucose'] > 300).sum()
+                self.df['Glucose'] = self.df['Glucose'].where(self.df['Glucose'] <= 300, np.nan)
+                print(f"  Glucose > 300              : {n_g:4d} → NaN")
 
-            n_a = (self.df['Age'] > 100).sum()
-            self.df['Age'] = self.df['Age'].where(self.df['Age'] <= 100, np.nan)
-            print(f"  Age > 100 (centinela 150) : {n_a:4d} → NaN")
+            if 'Age' in self.df.columns:
+                n_a = (self.df['Age'] > 100).sum()
+                self.df['Age'] = self.df['Age'].where(self.df['Age'] <= 100, np.nan)
+                print(f"  Age > 100 (centinela 150) : {n_a:4d} → NaN")
 
-            n_b_alto = (self.df['BMI'] > 60).sum()
-            n_b_bajo = ((self.df['BMI'] < 10) & (self.df['BMI'] > 0)).sum()
-            self.df['BMI'] = self.df['BMI'].where(self.df['BMI'] <= 60, np.nan)
-            self.df['BMI'] = self.df['BMI'].where((self.df['BMI'] >= 10) | (self.df['BMI'].isna()), np.nan)
-            print(f"  BMI > 60                   : {n_b_alto:4d} → NaN")
-            print(f"  BMI < 10 (error digitación): {n_b_bajo:4d} → NaN")
+            if 'BMI' in self.df.columns:
+                n_b_alto = (self.df['BMI'] > 60).sum()
+                n_b_bajo = ((self.df['BMI'] < 10) & (self.df['BMI'] > 0)).sum()
+                self.df['BMI'] = self.df['BMI'].where(self.df['BMI'] <= 60, np.nan)
+                self.df['BMI'] = self.df['BMI'].where((self.df['BMI'] >= 10) | (self.df['BMI'].isna()), np.nan)
+                print(f"  BMI > 60                   : {n_b_alto:4d} → NaN")
+                print(f"  BMI < 10 (error digitación): {n_b_bajo:4d} → NaN")
 
             print(f"\n  NaN totales tras este paso: {self.df.isna().sum().sum()}")
         return self
@@ -211,18 +257,22 @@ class PreprocesadorDiabetes:
         print(f"\n{'='*50}")
         print('ASSERTS DE RANGOS BIOLÓGICOS (pre-escalamiento):')
 
-        assert self.df['Age'].between(0, 100).all(), 'Age fuera del rango válido [0, 100]'
-        print('✓ Age en rango válido [0, 100]')
+        if 'Age' in self.df.columns:
+            assert self.df['Age'].between(0, 100).all(), 'Age fuera del rango válido [0, 100]'
+            print('✓ Age en rango válido [0, 100]')
 
-        assert (self.df['Glucose'] > 0).all(), 'Hay valores de Glucose ≤ 0 — imputación incompleta'
-        print('✓ Glucose > 0 en todas las filas')
+        if 'Glucose' in self.df.columns:
+            assert (self.df['Glucose'] > 0).all(), 'Hay valores de Glucose ≤ 0 — imputación incompleta'
+            print('✓ Glucose > 0 en todas las filas')
 
-        assert (self.df['BloodPressure'] > 0).all(), 'Hay valores de BloodPressure ≤ 0 — imputación incompleta'
-        print('✓ BloodPressure > 0 en todas las filas')
+        if 'BloodPressure' in self.df.columns:
+            assert (self.df['BloodPressure'] > 0).all(), 'Hay valores de BloodPressure ≤ 0 — imputación incompleta'
+            print('✓ BloodPressure > 0 en todas las filas')
 
-        assert (self.df['BMI'] > 0).all() and (self.df['BMI'] <= 60).all(), \
-            f'BMI fuera del rango válido (0, 60]: min={self.df["BMI"].min():.2f}'
-        print(f'✓ BMI en rango válido (0, 60]: min={self.df["BMI"].min():.2f}, max={self.df["BMI"].max():.2f}')
+        if 'BMI' in self.df.columns:
+            assert (self.df['BMI'] > 0).all() and (self.df['BMI'] <= 60).all(), \
+                f'BMI fuera del rango válido (0, 60]: min={self.df["BMI"].min():.2f}'
+            print(f'✓ BMI en rango válido (0, 60]: min={self.df["BMI"].min():.2f}, max={self.df["BMI"].max():.2f}')
 
         assert self.df.duplicated().sum() == 0, 'Hay filas duplicadas'
         print('✓ Sin filas duplicadas')
@@ -237,10 +287,11 @@ class PreprocesadorDiabetes:
         """Audita anomalías de dominio en rangos de valor menores o iguales a cero."""
         if self.df is None:
             return None
+        validas = [c for c in columnas if c in self.df.columns]
         resumen = pd.DataFrame({
-            'Variable': columnas,
-            'Valores <= 0': [(self.df[c] <= 0).sum() for c in columnas],
-            'Porcentaje (%)': [round((self.df[c] <= 0).sum() / len(self.df) * 100, 2) for c in columnas],
+            'Variable': validas,
+            'Valores <= 0': [(self.df[c] <= 0).sum() for c in validas],
+            'Porcentaje (%)': [round((self.df[c] <= 0).sum() / len(self.df) * 100, 2) for c in validas],
         })
         return resumen.sort_values('Porcentaje (%)', ascending=False).reset_index(drop=True)
 
@@ -250,34 +301,39 @@ class PreprocesadorDiabetes:
             return None
         resultado = []
         for col in columnas:
-            q1 = self.df[col].quantile(0.25)
-            q3 = self.df[col].quantile(0.75)
-            iqr = q3 - q1
-            li = q1 - 1.5 * iqr
-            ls = q3 + 1.5 * iqr
-            n = ((self.df[col] < li) | (self.df[col] > ls)).sum()
-            resultado.append([col, n])
+            if col in self.df.columns:
+                q1 = self.df[col].quantile(0.25)
+                q3 = self.df[col].quantile(0.75)
+                iqr = q3 - q1
+                li = q1 - 1.5 * iqr
+                ls = q3 + 1.5 * iqr
+                n = ((self.df[col] < li) | (self.df[col] > ls)).sum()
+                resultado.append([col, n])
         return pd.DataFrame(resultado, columns=['Variable', 'Cantidad de Outliers']) \
                  .sort_values('Cantidad de Outliers', ascending=False).reset_index(drop=True)
 
     def crear_variables_derivadas(self):
         """Construye las segmentaciones de rango clínico para AgeGroup y BMI_Category."""
         if self.df is not None:
-            self.df['AgeGroup'] = pd.cut(
-                self.df['Age'],
-                bins=[0, 29, 44, 59, 200],
-                labels=['18-29', '30-44', '45-59', '60+'],
-                right=True
-            )
-            self.df['BMI_Category'] = pd.cut(
-                self.df['BMI'],
-                bins=[0, 18.5, 25.0, 30.0, 200],
-                labels=['Bajo_peso', 'Normal', 'Sobrepeso', 'Obesidad'],
-                right=True
-            )
+            if 'Age' in self.df.columns:
+                self.df['AgeGroup'] = pd.cut(
+                    self.df['Age'],
+                    bins=[0, 29, 44, 59, 200],
+                    labels=['18-29', '30-44', '45-59', '60+'],
+                    right=True
+                )
+            if 'BMI' in self.df.columns:
+                self.df['BMI_Category'] = pd.cut(
+                    self.df['BMI'],
+                    bins=[0, 18.5, 25.0, 30.0, 200],
+                    labels=['Bajo_peso', 'Normal', 'Sobrepeso', 'Obesidad'],
+                    right=True
+                )
             print("[VARIABLES DERIVADAS]")
-            print("  AgeGroup:\n", self.df['AgeGroup'].value_counts().sort_index().to_string())
-            print("  BMI_Category:\n", self.df['BMI_Category'].value_counts().sort_index().to_string())
+            if 'AgeGroup' in self.df.columns:
+                print("  AgeGroup:\n", self.df['AgeGroup'].value_counts().sort_index().to_string())
+            if 'BMI_Category' in self.df.columns:
+                print("  BMI_Category:\n", self.df['BMI_Category'].value_counts().sort_index().to_string())
         return self
 
     def codificar_categoricas(self, columnas: list):
@@ -285,6 +341,8 @@ class PreprocesadorDiabetes:
         if self.df is not None:
             print('[ONE-HOT ENCODING]')
             for col in columnas:
+                if col not in self.df.columns:
+                    continue
                 n_antes = self.df.shape[1]
                 dummies = pd.get_dummies(self.df[col], prefix=col, drop_first=True, dtype=int)
                 self.df = pd.concat([self.df, dummies], axis=1)
@@ -302,12 +360,14 @@ class PreprocesadorDiabetes:
     def escalar_variables(self, columnas: list):
         """Aplica StandardScaler in-place preservando la dimensionalidad compacta."""
         if self.df is not None:
-            scaler = StandardScaler()
-            self.df[columnas] = scaler.fit_transform(self.df[columnas])
-            print("[ESCALAMIENTO StandardScaler]")
-            print(f"  Columnas escaladas: {columnas}")
-            print("\n  Verificación — media y desviación estándar post-escalamiento:")
-            print(f"  (media ≈ 0 y std ≈ 1 confirman aplicación correcta)")
+            validas = [c for c in columnas if c in self.df.columns]
+            if validas:
+                scaler = StandardScaler()
+                self.df[validas] = scaler.fit_transform(self.df[validas])
+                print("[ESCALAMIENTO StandardScaler]")
+                print(f"  Columnas escaladas: {validas}")
+                print("\n  Verificación — media y desviación estándar post-escalamiento:")
+                print(f"  (media ≈ 0 y std ≈ 1 confirman aplicación correcta)")
         return self
 
     def validar_dataset_final(self):
@@ -315,8 +375,8 @@ class PreprocesadorDiabetes:
         if self.df is None:
             return self
 
-        COLS_BASE = ['Pregnancies', 'Glucose', 'BloodPressure', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age', 'Outcome']
-        COLS_ESCALADAS = ['Pregnancies', 'Glucose', 'BloodPressure', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']
+        COLS_BASE = [c for c in ['Pregnancies', 'Glucose', 'BloodPressure', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age', 'Outcome'] if c in self.df.columns]
+        COLS_ESCALADAS = [c for c in ['Pregnancies', 'Glucose', 'BloodPressure', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age'] if c in self.df.columns]
 
         print('=' * 55 + '\nVALIDACIÓN TÉCNICA FINAL\n' + '=' * 55)
 
@@ -331,9 +391,10 @@ class PreprocesadorDiabetes:
         print('✓ Sin filas duplicadas')
 
         # 3 — Outcome en {0, 1}
-        vals = set(self.df['Outcome'].unique())
-        assert vals.issubset({0, 1}), f'Outcome contiene valores inesperados: {vals}'
-        print('✓ Outcome solo contiene {0, 1}')
+        if 'Outcome' in self.df.columns:
+            vals = set(self.df['Outcome'].unique())
+            assert vals.issubset({0, 1}), f'Outcome contiene valores inesperados: {vals}'
+            print('✓ Outcome solo contiene {0, 1}')
 
         # 4 — Coherencia dimensional
         assert len(self.df) <= len(self.df_original), 'El dataset final tiene más filas que el original'
@@ -349,8 +410,9 @@ class PreprocesadorDiabetes:
         print(f'✓ {len(COLS_ESCALADAS)} columnas escaladas con media≈0 y std≈1')
 
         # 6 — Aislamiento del vector objetivo
-        assert self.df['Outcome'].isin([0, 1]).all(), 'Outcome parece haber sido escalado por error'
-        print('✓ Outcome conserva valores binarios {0, 1} (no fue escalado)')
+        if 'Outcome' in self.df.columns:
+            assert self.df['Outcome'].isin([0, 1]).all(), 'Outcome parece haber sido escalado por error'
+            print('✓ Outcome conserva valores binarios {0, 1} (no fue escalado)')
 
         print(f'\n{"-" * 55}\nINFORMACIÓN DEL DATASET FINAL (df.info()):\n{"-" * 55}')
         self.df.info()
@@ -362,7 +424,11 @@ class PreprocesadorDiabetes:
         if self.df is None or self.df_original is None:
             return
 
-        COLS_BASE = ['Pregnancies', 'Glucose', 'BloodPressure', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age', 'Outcome']
+        COLS_BASE = [c for c in ['Pregnancies', 'Glucose', 'BloodPressure', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age', 'Outcome'] if c in self.df.columns]
+        
+        bp_raw_type = str(self.df_original['BloodPressure'].dtype) if 'BloodPressure' in self.df_original.columns else 'N/A'
+        bp_proc_type = str(self.df['BloodPressure'].dtype) if 'BloodPressure' in self.df.columns else 'N/A'
+
         resumen = pd.DataFrame({
             'Métrica': ['Filas', 'Columnas', 'NaN totales', 'Duplicados', 'Tipo BloodPressure'],
             'RAW (original)': [
@@ -370,24 +436,25 @@ class PreprocesadorDiabetes:
                 self.df_original.shape[1],
                 self.df_original.isna().sum().sum(),
                 self.df_original.duplicated().sum(),
-                str(self.df_original['BloodPressure'].dtype),
+                bp_raw_type,
             ],
             'Procesado (final)': [
                 self.df.shape[0],
                 self.df.shape[1],
                 self.df[COLS_BASE].isna().sum().sum(),
                 self.df.duplicated().sum(),
-                str(self.df['BloodPressure'].dtype),
+                bp_proc_type,
             ],
         })
 
         print("=" * 60 + "\nCOMPARACIÓN RAW vs PROCESADO\n" + "=" * 60)
         print(resumen.to_string(index=False))
 
-        print("\nDistribución final de Outcome:")
-        conteo = self.df['Outcome'].value_counts()
-        pct = self.df['Outcome'].value_counts(normalize=True).mul(100).round(2)
-        print(pd.DataFrame({'Conteo': conteo, '%': pct}).to_string())
+        if 'Outcome' in self.df.columns:
+            print("\nDistribución final de Outcome:")
+            conteo = self.df['Outcome'].value_counts()
+            pct = self.df['Outcome'].value_counts(normalize=True).mul(100).round(2)
+            print(pd.DataFrame({'Conteo': conteo, '%': pct}).to_string())
         return self
 
     def exportar_dataset(self, ruta_destino: Path):
