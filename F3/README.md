@@ -16,7 +16,7 @@ El trabajo se desarrolla sobre un flujo reproducible de carga, limpieza, transfo
 F3/
 ├── data/
 │   ├── raw/
-│   │   └── diabetes_raw.csv
+│   │   └── diabetes_processed.csv
 │   └── processed/
 │       └── .gitkeep
 ├── docs/
@@ -305,3 +305,20 @@ La carpeta F3 contiene los componentes necesarios para responder los criterios p
 ## Licencia
 
 La licencia general del proyecto se encuentra definida en el archivo `LICENSE` ubicado en la raíz del repositorio.
+
+## Reproducibilidad
+
+Para reproducir el proyecto en otro equipo, se deben ejecutar los siguientes pasos:
+
+```powershell
+git clone https://github.com/MagUnab/mcdia500-programacion-cd-g6.git
+cd mcdia500-programacion-cd-g6/F3
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m ipykernel install --user --name mcdia500-g6 --display-name "Python 3.12 - MCDIA500 G6"
+python -m jupyterlab --ServerApp.use_redirect_file=False
+```
+
+Con estos pasos, el entorno queda configurado para ejecutar los notebooks del proyecto.
