@@ -1,0 +1,11 @@
+# Dependencias Fase 4 - MCDIA500 Programación para Ciencia de Datos
+# Requiere Python >= 3.10
+
+numpy>=1.26
+pandas>=2.2
+matplotlib>=3.8
+scikit-learn>=1.4
+jupyter>=1.0
+notebook>=7.0
+ipykernel>=6.29
+openpyxl>=3.1
