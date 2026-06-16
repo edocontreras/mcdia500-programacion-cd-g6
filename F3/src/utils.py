@@ -53,7 +53,6 @@ class PreprocesadorBase:
 
     def cargar_datos(self):
         """Lee el dataset crudo y valida su integridad inicial."""
-        print("ruta_absoluta:", self.ruta.absolute())
         if not self.ruta.exists():
             raise FileNotFoundError(f"Archivo no encontrado: {self.ruta}")
         
