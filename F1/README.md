@@ -1,233 +1,290 @@
-# MCDIA500 - Programación para Ciencia de Datos
+# Fase 1 - Diagnóstico y Auditoría Inicial de Calidad de Datos Clínicos
 
-## Objetivo De la Fase
+Este directorio contiene el desarrollo correspondiente a la **Fase 1** del proyecto del curso **MCDIA500 - Programación para la Ciencia de Datos**.
 
-- Definir el problema y estructurar el dataset con el cual trabajaremos
-- Generar estructura del Repositorio
-- Generar stack cientifico de desarrollo 
-- Crear Notebook F1_Definicion.ipynb que realice la carga y lectura de dataset
+El propósito de esta fase es establecer una base técnica reproducible para la carga, inspección y auditoría inicial del dataset clínico `diabetes_raw.csv`, sin modificar el archivo original. La Fase 1 se limita a diagnosticar la estructura inicial del conjunto de datos, verificar el entorno computacional y documentar un flujo mínimo de trabajo reproducible.
+
+> **Importante:** En esta fase no se realiza limpieza, imputación, transformación, partición de datos, entrenamiento de modelos ni evaluación predictiva. Estas actividades quedan proyectadas para fases posteriores del proyecto.
 
 ---
 
-## Estructura de la Fase
+## Objetivo de la Fase 1
+
+Desarrollar un flujo secuencial interactivo de auditoría y diagnóstico estructural de datos en Python para caracterizar de manera reproducible el estado inicial del conjunto de datos clínicos `diabetes_raw.csv`, verificando dimensiones, columnas, tipos de datos, valores faltantes, registros duplicados y distribución de la variable objetivo, sin modificar el archivo original durante la Fase 1 del proyecto.
+
+---
+
+## Alcance de esta fase
+
+La Fase 1 considera las siguientes actividades:
+
+* Configuración de un entorno reproducible de trabajo.
+* Declaración de dependencias mediante `requirements.txt`.
+* Carga del archivo crudo `diabetes_raw.csv` desde una ruta relativa.
+* Inspección inicial de dimensiones, columnas y tipos de datos.
+* Diagnóstico básico de valores faltantes.
+* Identificación de registros duplicados exactos.
+* Revisión de la distribución de la variable objetivo `Outcome`.
+* Documentación inicial del flujo de trabajo en un notebook Jupyter.
+* Organización del repositorio según una estructura reproducible.
+
+Quedan fuera del alcance de esta fase:
+
+* Limpieza del dataset.
+* Conversión o saneamiento de variables.
+* Imputación de valores faltantes.
+* Eliminación de duplicados.
+* Normalización o escalamiento de variables.
+* Generación de datasets procesados.
+* Análisis exploratorio profundo.
+* Partición `train/test`.
+* Entrenamiento de modelos de machine learning.
+* Evaluación mediante métricas predictivas.
+
+---
+
+## Estructura de la carpeta F1
 
 ```text
-mcdia500-programacion-cd-g6/
-└── F1/
-    ├── data/
-    │   ├── raw/
-    │   │   └── diabetes_raw.csv
-    │   └── processed/
-    │       └── .gitkeep
-    ├── docs/
-    │   └── .gitkeep
-    ├── notebooks/
-    │   └── F1_Definicion.ipynb
-    ├── reports/
-    │   └── .gitkeep
-    ├── src/
-    ├── requirements.txt
-    ├── README.md
-    └── .gitignore
+F1/
+├── data/
+│   ├── raw/
+│   │   └── diabetes_raw.csv
+│   └── processed/
+│       └── .gitkeep
+├── docs/
+├── notebooks/
+│   └── F1_Definicion.ipynb
+├── reports/
+│   └── .gitkeep
+├── src/
+│   └── .gitkeep
+├── .gitignore
+├── LICENSE
+├── README.md
+└── requirements.txt
 ```
 
-### Descripción de las carpetas
-- `F1`: raíz de la Fase 1.
-- `data/raw/`: contiene los datos originales o crudos del proyecto.
-- `data/processed/`: contiene datasets procesados, limpios o transformados.
-- `docs/`: contiene documentación complementaria del proyecto.
-- `notebooks/`: contiene los notebooks de análisis, limpieza, experimentación y modelamiento.
-- `reports/`: contiene reportes, resultados, gráficos exportados o conclusiones generadas.
-- `src/`: contiene funciones reutilizables, módulos auxiliares y código Python del proyecto.
+---
+
+## Descripción de carpetas y archivos
+
+| Elemento           | Descripción                                                                                                      |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `data/raw/`        | Contiene el dataset original `diabetes_raw.csv`. Este archivo no debe modificarse.                               |
+| `data/processed/`  | Carpeta reservada para datasets procesados que serán generados en fases posteriores.                             |
+| `docs/`            | Contiene documentos formales asociados a la entrega de Fase 1.                                                   |
+| `notebooks/`       | Contiene el notebook `F1_Definicion.ipynb`, utilizado para la carga inicial y auditoría estructural básica.      |
+| `reports/`         | Carpeta reservada para salidas, figuras o reportes que serán generados en fases posteriores.                     |
+| `src/`             | Carpeta reservada para funciones reutilizables y módulos auxiliares que serán incorporados en fases posteriores. |
+| `requirements.txt` | Declara las dependencias necesarias para ejecutar el notebook de Fase 1.                                         |
+| `README.md`        | Documento de orientación técnica para reproducir la Fase 1.                                                      |
+| `.gitignore`       | Define archivos y carpetas excluidos del control de versiones.                                                   |
+| `LICENSE`          | Archivo de licencia del proyecto.                                                                                |
 
 ---
 
-## Requisitos previos
+## Entorno de ejecución
 
-Antes de ejecutar el proyecto, es necesario tener instalado:
+El notebook fue ejecutado y verificado con el siguiente entorno:
 
-- Python 3.12.x
-- Git
-- Visual Studio Code, JupyterLab o Jupyter Notebook
+```text
+Python 3.12.4
+NumPy 1.26.4
+Pandas 2.2.2
+ipykernel 6.28.0
+notebook 7.0.8
+JupyterLab 4.0.11
+```
+
+Estas versiones se encuentran declaradas en el archivo `requirements.txt` de la Fase 1.
 
 ---
 
-## Instalación del proyecto
+## Dependencias principales
+
+El archivo `requirements.txt` contiene las dependencias necesarias para ejecutar el notebook de Fase 1:
+
+```text
+jupyterlab==4.0.11
+notebook==7.0.8
+ipykernel==6.28.0
+pandas==2.2.2
+numpy==1.26.4
+```
+
+No se incorporan librerías de modelamiento predictivo, visualización avanzada ni aprendizaje automático, ya que no forman parte del alcance operativo de esta fase.
+
+---
+
+## Instrucciones de reproducción
 
 ### 1. Clonar el repositorio
 
-```powershell
-git clone https://github.com/MagUnab/mcdia500-programacion-cd-g6.git
+```bash
+git clone https://github.com/edocontreras/mcdia500-programacion-cd-g6.git
 ```
 
-Ingresar a la carpeta donde se clonó el repositorio:
+### 2. Ingresar a la carpeta de la Fase 1
 
-```powershell
+```bash
 cd mcdia500-programacion-cd-g6/F1
 ```
 
----
+### 3. Crear un entorno virtual
 
-### 2. Crear el entorno virtual
+En Windows:
 
-```powershell
+```bash
 python -m venv .venv
 ```
 
----
-
-### 3. Activar el entorno virtual
+### 4. Activar el entorno virtual
 
 En Windows PowerShell:
 
-```powershell
+```bash
 .venv\Scripts\Activate.ps1
 ```
 
-Si la activación fue correcta, se debe ver algo como esto:
+En Windows CMD:
 
-```text
-(.venv) PS C:\ruta\del\proyecto\F1>
+```bash
+.venv\Scripts\activate.bat
 ```
 
----
+### 5. Actualizar `pip`
 
-### 4. Actualizar pip
-
-```powershell
+```bash
 python -m pip install --upgrade pip
 ```
 
----
+### 6. Instalar dependencias
 
-### 5. Instalar las dependencias del proyecto
-
-```powershell
+```bash
 python -m pip install -r requirements.txt
 ```
 
+### 7. Registrar el kernel de Jupyter
+
+```bash
+python -m ipykernel install --user --name mcdia500-f1-g6 --display-name "Python 3.12.4 - MCDIA500 F1 G6"
+```
+
+### 8. Abrir JupyterLab
+
+```bash
+python -m jupyterlab
+```
+
+### 9. Ejecutar el notebook
+
+Abrir el archivo:
+
+```text
+notebooks/F1_Definicion.ipynb
+```
+
+Luego seleccionar el kernel:
+
+```text
+Python 3.12.4 - MCDIA500 F1 G6
+```
+
+Finalmente, ejecutar:
+
+```text
+Kernel > Restart Kernel and Run All Cells
+```
+
+La ejecución se considera correcta si el notebook finaliza sin errores y muestra la verificación del entorno, la carga del dataset, las dimensiones, columnas, tipos de datos, valores faltantes, duplicados exactos y distribución de `Outcome`.
+
 ---
 
-### 6. Registrar el entorno virtual como kernel de Jupyter
+## Notebook principal
 
-```powershell
-python -m ipykernel install --user --name mcdia500-g6 --display-name "Python 3.12 - MCDIA500 G6"
+El notebook principal de esta fase es:
+
+```text
+notebooks/F1_Definicion.ipynb
 ```
+
+Este notebook realiza las siguientes acciones:
+
+* Verifica las versiones del entorno de ejecución.
+* Carga el archivo `diabetes_raw.csv` desde `data/raw/`.
+* Revisa la existencia de la ruta relativa del dataset.
+* Muestra dimensiones del conjunto de datos.
+* Lista columnas disponibles.
+* Inspecciona tipos de datos.
+* Ejecuta `df.info()`.
+* Muestra las primeras filas del dataset.
+* Reporta valores nulos por variable.
+* Reporta duplicados exactos.
+* Calcula la distribución absoluta y porcentual de la variable objetivo `Outcome`.
 
 ---
 
-### 7. Ejecutar JupyterLab
+## Dataset utilizado
 
-```powershell
-python -m jupyterlab --ServerApp.use_redirect_file=False
-```
-
-Dentro de JupyterLab seleccionarel kernel:
+El archivo de datos utilizado en esta fase es:
 
 ```text
-Kernel → Change Kernel → Python 3.12 - MCDIA500 G6
+data/raw/diabetes_raw.csv
 ```
 
----
-
-## Uso del proyecto
-
-Los notebooks del proyecto se encuentran en la carpeta:
-
-```text
-notebooks/
-```
-
-Los datos originales (crudos) se encuentran en:
-
-```text
-data/raw/
-```
-
-Las funciones reutilizables se encuentran en:
-
-```text
-src/
-```
-
-Desde un notebook ubicado en la carpeta `notebooks/`, se pueden importar funciones desde `src/` usando:
-
-```python
-import sys
-from pathlib import Path
-
-project_root = Path.cwd().parent
-sys.path.append(str(project_root / "src"))
-```
-
-Ejemplo de carga de datos:
-
-```python
-import pandas as pd
-
-df = pd.read_csv("../data/raw/diabetes_raw.csv", sep=";")
-df.head()
-```
+Este archivo se mantiene en estado crudo y no debe sobrescribirse ni modificarse durante la Fase 1. Toda acción realizada en el notebook corresponde a lectura, inspección y diagnóstico inicial.
 
 ---
 
 ## Control de versiones
 
-Para revisar el estado del repositorio:
+El proyecto utiliza Git y GitHub para mantener trazabilidad del avance técnico. Se recomienda utilizar mensajes de commit descriptivos, siguiendo una convención simple basada en prefijos.
 
-```powershell
-git status
-```
+Ejemplos de prefijos:
 
-Para agregar cambios:
+| Prefijo   | Uso                                            |
+| --------- | ---------------------------------------------- |
+| `docs:`   | Cambios en documentación o README.             |
+| `fix:`    | Corrección de errores o ajustes de coherencia. |
+| `config:` | Ajustes de dependencias o configuración.       |
+| `data:`   | Incorporación o movimiento de datos.           |
+| `chore:`  | Cambios de estructura o mantenimiento.         |
 
-```powershell
-git add .
-```
+Ejemplo de commit recomendado para esta fase:
 
-Para crear un commit:
-
-```powershell
-git commit -m "feat: Nueva función python que realiza limpieza de dataset "
-```
-
-Para subir los cambios a GitHub:
-
-```powershell
+```bash
+git add F1/README.md F1/requirements.txt F1/notebooks/F1_Definicion.ipynb
+git commit -m "fix: corrige coherencia técnica de Fase 1 según rúbrica"
 git push
 ```
 
 ---
 
-## Archivos que no deben subirse al repositorio
+## Estado de componentes de Fase 1
 
-La carpeta `.venv/` no debe subirse a GitHub, ya que cada persona que quiera clonar y trabajar en este proyecto debe crear su propio entorno virtual local a partir del archivo `requirements.txt`.
-
-El archivo `.gitignore` debería considerar al menos:
-
-```gitignore
-.venv/
-__pycache__/
-.ipynb_checkpoints/
-*.pyc
-.env
-```
+| Componente                                 | Estado                            |
+| ------------------------------------------ | --------------------------------- |
+| Dataset crudo en `data/raw/`               | Implementado                      |
+| Carpeta `data/processed/`                  | Proyectada para fases posteriores |
+| Notebook de definición y auditoría inicial | Implementado                      |
+| Archivo `requirements.txt`                 | Implementado                      |
+| Carpeta `src/`                             | Proyectada para fases posteriores |
+| Carpeta `reports/`                         | Proyectada para fases posteriores |
+| Limpieza de datos                          | Fuera del alcance de Fase 1       |
+| Modelamiento predictivo                    | Fuera del alcance de Fase 1       |
+| Evaluación de métricas predictivas         | Fuera del alcance de Fase 1       |
 
 ---
 
-## Reproducibilidad
+## Integrantes
 
-Para reproducir el proyecto en otro equipo, se deben ejecutar los siguientes pasos:
+* Gonzalo Bouldres V.
+* Luis Díaz G.
+* Eduardo Contreras C.
 
-```powershell
-git clone https://github.com/MagUnab/mcdia500-programacion-cd-g6.git
-cd mcdia500-programacion-cd-g6/F1
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m ipykernel install --user --name mcdia500-g6 --display-name "Python 3.12 - MCDIA500 G6"
-python -m jupyterlab --ServerApp.use_redirect_file=False
-```
+---
 
-Con estos pasos, el entorno queda configurado para ejecutar los notebooks del proyecto.
+## Observación final
+
+Esta carpeta constituye la base reproducible de la Fase 1. Su propósito es documentar y ejecutar una auditoría inicial del dataset clínico sin alterar la fuente original. Los resultados obtenidos permiten establecer una línea base técnica para las fases posteriores del proyecto, donde se abordarán limpieza, transformación, análisis exploratorio, modelamiento y evaluación.
